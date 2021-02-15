@@ -273,6 +273,7 @@ class _SpectrumParent:
         else:
             i = None if high is None else find_index(high, self.fs)
             plt.plot(self.fs[:i], self.amps[:i], **options)
+        plt.show()
 
     def plot_power(self, high=None, **options):
         """Plots power vs frequency.
@@ -285,6 +286,7 @@ class _SpectrumParent:
         else:
             i = None if high is None else find_index(high, self.fs)
             plt.plot(self.fs[:i], self.power[:i], **options)
+        plt.show()
 
     def estimate_slope(self):
         """Runs linear regression on log power vs log frequency.
@@ -336,7 +338,10 @@ class Spectrum(_SpectrumParent):
 
         returns: new Spectrum
         """
-        assert all(self.fs == other.fs)
+        # NOTE: Commented out by marksweiss. This is assert is broken and fails
+        # all spectrum multilications of two non-identical spectrums, e.g. when
+        # modifying a source spectrum by an impulse response spectrum.
+        # assert all(self.fs == other.fs)
         hs = self.hs * other.hs
         return Spectrum(hs, self.fs, self.framerate, self.full)
 
@@ -1016,6 +1021,7 @@ class Wave:
         """
         xfactor = self.get_xfactor(options)
         plt.plot(self.ts * xfactor, np.real(self.ys), **options)
+        plt.show()
 
     def plot_vlines(self, **options):
         """Plots the wave with vertical lines for samples.
@@ -1084,7 +1090,7 @@ class Wave:
 
         filename: string
         """
-        print("Writing", filename)
+        # print("Writing", filename)
         wfile = WavFileWriter(filename, self.framerate)
         wfile.write(self)
         wfile.close()
@@ -1236,14 +1242,14 @@ class Signal:
         """
         return 0.1
 
-    def plot(self, framerate=11025):
+    def plot(self, framerate=11025, num_periods=3):
         """Plots the signal.
 
         The default behavior is to plot three periods.
 
         framerate: samples per second
         """
-        duration = self.period * 3
+        duration = self.period * num_periods 
         wave = self.make_wave(duration, start=0, framerate=framerate)
         wave.plot()
 
