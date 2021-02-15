@@ -40,16 +40,6 @@ class TriangleSignal(Sinusoid):
         return ys
 
 
-# # NOTE: Copied from the book and annotated
-# class SquareSignal(Sinusoid):
-#     def evaluate(self, ts):
-#         cycles = self.freq * ts + self.offset / PI2
-#         frac, _ = np.modf(cycles)
-#         # Center samples around 0 and then call sign() to map them all to {+1 if x >= 0, else -1}
-#         ys = self.amp * np.sign(unbias(frac))
-#         return ys
-
-
 class SawtoothSignal(Sinusoid):
     def evaluate(self, ts):
         cycles = self.freq * ts + self.offset / PI2
